@@ -9,6 +9,8 @@ static const int pinSensor = A0; // sensor
 static InputDebounce buttonA;
 bool activeSensor = true;
 
+HardwareSerial &serial = Serial1; // or Serial
+
 void buttonTest_pressedCallback(uint8_t pinIn)
 {
 	RTCTime currenttime;
@@ -17,14 +19,14 @@ void buttonTest_pressedCallback(uint8_t pinIn)
 	activeSensor = !activeSensor;
 	if (activeSensor)
 	{
-		Serial1.print(currenttime.toString());
-		Serial1.println(": Started reading sensor");
+		serial.print(currenttime.toString());
+		serial.println(": Started reading sensor");
 		digitalWrite(LED_BUILTIN, LOW);
 	}
 	else
 	{
-		Serial1.print(currenttime.toString());
-		Serial1.println(": Stopped reading sensor");
+		serial.print(currenttime.toString());
+		serial.println(": Stopped reading sensor");
 		digitalWrite(LED_BUILTIN, HIGH);
 	}
 }
@@ -44,8 +46,7 @@ void buttonTest_releasedDurationCallback(uint8_t pinIn, unsigned long duration)
 void setup()
 {
 	pinMode(pinLED, OUTPUT);
-	Serial.begin(115200);
-	Serial1.begin(115200);
+	serial.begin(115200);
 
 	buttonA.registerCallbacks(buttonTest_pressedCallback, buttonTest_releasedCallback, buttonTest_pressedDurationCallback, buttonTest_releasedDurationCallback);
 	buttonA.setup(pinButton, BUTTON_DEBOUNCE_DELAY, InputDebounce::PIM_INT_PULL_UP_RES);
@@ -83,19 +84,15 @@ void setup()
 
 void loop()
 {
-	RTCTime currenttime;
-	RTC.getTime(currenttime);
-
+	static unsigned long lastSensorRead = 0;
 	unsigned long now = millis();
 
 	buttonA.process(now);
 
-	if (activeSensor)
+	if (activeSensor && (now - lastSensorRead >= 200))
 	{
 		int sensorValue = analogRead(pinSensor);
-		Serial.println(sensorValue);
-		Serial1.println(sensorValue);
+		serial.println(sensorValue);
+		lastSensorRead = now;
 	}
-
-	delay(1);
 }
