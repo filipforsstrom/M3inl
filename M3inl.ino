@@ -5,7 +5,7 @@
 
 static const int pinLED = LED_BUILTIN; // 13
 static const int pinButton = 2;
-static const int pinSensor = A0; // sensor
+static const int pinSensor = A0; // tilt sensor
 static InputDebounce buttonA;
 bool activeSensor = true;
 
