@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${PACKAGES_PATH}/**",
+				"${LIBRARIES_PATH}/**"
+            ],
+            "defines": [],
+            "compilerPath": "${env:COMPILER_PATH}/arm-none-eabi-gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-arm"
+        }
+    ],
+    "version": 4
+}

@@ -1,0 +1,65 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Compile",
+			"type": "shell",
+			"command": "arduino-cli",
+			"args": [
+				"compile",
+				"--fqbn",
+				"arduino:renesas_uno:unor4wifi",
+				"${env:INO_PATH}"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"detail": "Compile Arduino sketch using arduino-cli"
+		},
+		{
+			"label": "Upload",
+			"type": "shell",
+			"command": "arduino-cli",
+			"args": [
+				"upload",
+				"-p",
+				"${env:DEVICE_PORT}",
+				"--fqbn",
+				"arduino:renesas_uno:unor4wifi",
+				"${env:INO_PATH}",
+				"--verbose"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"dependsOn": [
+				"Compile"
+			],
+			"problemMatcher": [],
+			"detail": "Upload Arduino sketch using arduino-cli"
+		},
+		{
+			"label": "Upload and monitor",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"arduino-cli upload -p ${env:DEVICE_PORT} --fqbn arduino:renesas_uno:unor4wifi ${env:INO_PATH} --verbose && tio ${env:DEVICE_PORT}"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"dependsOn": [
+				"Compile"
+			],
+			"problemMatcher": [],
+			"detail": "Upload Arduino sketch and reconnect tio"
+		}
+	]
+}
