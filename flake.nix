@@ -34,8 +34,7 @@
     in rec {
       packages.arduino-cli = pkgs.wrapArduinoCLI {
         libraries = [
-          # (arduino-nix.latestVersion pkgs.arduinoLibraries."MIDI Library")
-          # (arduino-nix.latestVersion pkgs.arduinoLibraries."MIDIUSB")
+          (arduino-nix.latestVersion pkgs.arduinoLibraries."InputDebounce")
         ];
 
         packages = with pkgs.arduinoPackages; [
