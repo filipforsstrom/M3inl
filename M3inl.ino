@@ -31,24 +31,12 @@ void buttonTest_pressedCallback(uint8_t pinIn)
 	}
 }
 
-void buttonTest_releasedCallback(uint8_t pinIn)
-{
-}
-
-void buttonTest_pressedDurationCallback(uint8_t pinIn, unsigned long duration)
-{
-}
-
-void buttonTest_releasedDurationCallback(uint8_t pinIn, unsigned long duration)
-{
-}
-
 void setup()
 {
 	pinMode(pinLED, OUTPUT);
 	serial.begin(115200);
 
-	buttonA.registerCallbacks(buttonTest_pressedCallback, buttonTest_releasedCallback, buttonTest_pressedDurationCallback, buttonTest_releasedDurationCallback);
+	buttonA.registerCallbacks(buttonTest_pressedCallback, NULL, NULL, NULL);
 	buttonA.setup(pinButton, BUTTON_DEBOUNCE_DELAY, InputDebounce::PIM_INT_PULL_UP_RES);
 
 	RTC.begin();
@@ -67,19 +55,14 @@ void setup()
 		if (savedTime.getYear() == 2000)
 		{
 			RTC.setTime(mytime);
+			serial.println("RTC was not running, setting time to default");
 		}
 		else
 		{
 			RTC.setTime(savedTime);
+			serial.println("RTC was running, setting time to saved time");
 		}
 	}
-
-	// examples
-	// buttonA.registerCallbacks(buttonTest_pressedCallback, NULL, NULL, buttonTest_releasedDurationCallback); // no continuous pressed-on time duration, ...
-	// buttonA.setup(pinButton);
-	// buttonA.setup(pinButton, BUTTON_DEBOUNCE_DELAY);
-	// buttonA.setup(pinButton, DEFAULT_INPUT_DEBOUNCE_DELAY, InputDebounce::PIM_EXT_PULL_UP_RES);
-	// buttonA.setup(pinButton, BUTTON_DEBOUNCE_DELAY, InputDebounce::PIM_INT_PULL_UP_RES, 0, InputDebounce::ST_NORMALLY_CLOSED); // switch-type normally closed
 }
 
 void loop()
